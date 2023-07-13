@@ -1,5 +1,3 @@
-//*********************VARIABLE DUMP*************************************
-//########################Timer 1#######################################
 let timer1 = document.querySelector('.timer1');
 let button1 = document.querySelector('.start1');
 let startButton1 = document.createElement("button");
@@ -196,4 +194,3 @@ function startButtonClick4() {
   button4.click();
   startButton4.replaceWith(timer4);
 }
-
