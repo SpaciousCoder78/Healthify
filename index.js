@@ -167,6 +167,7 @@ function getCurrentDate() {
 
 
 // Function to fetch and display the net calories
+// Function to fetch and display the net calories
 function displayNetCalories() {
   const currentDate = getCurrentDate(); // Implement this function to get the current date in the desired format
 
@@ -180,6 +181,8 @@ function displayNetCalories() {
       const caloriesConsumed = parseFloat(data[1].totalCaloriesConsumed) || 0;
       const netCalories = caloriesBurnt - caloriesConsumed;
 
+      console.log('Net Calories:', netCalories); // Print net calories value
+
       // Update the net calories on the HTML page
       const netCaloriesElement = document.getElementById('net-calories');
       netCaloriesElement.textContent = `Net Calories: ${netCalories.toFixed(2)}`;
@@ -188,6 +191,3 @@ function displayNetCalories() {
       console.log('Error fetching total calories:', error);
     });
 }
-
-// Call the function to display net calories on page load
-displayNetCalories();

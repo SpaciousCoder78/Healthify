@@ -58,6 +58,7 @@ def store_calories_consumed_in_database(date, calories_consumed):
     conn.close()
 
 # Function to get total calories burnt for a given date
+# Function to get total calories burnt for a given date
 @app.route('/get-calories-burnt', methods=['GET'])
 def get_total_calories_burnt(date):
     conn = sqlite3.connect('fitness.db')
@@ -65,6 +66,7 @@ def get_total_calories_burnt(date):
     c.execute('SELECT SUM(calories_burnt) FROM calories_burnt WHERE date = ?', (date,))
     total_calories_burnt = c.fetchone()[0]
     conn.close()
+    print('Total Calories Burnt:', total_calories_burnt)  # Add this line to print the value
     return total_calories_burnt
 
 # Function to get total calories consumed for a given date
@@ -75,7 +77,9 @@ def get_total_calories_consumed(date):
     c.execute('SELECT SUM(calories_consumed) FROM calories_consumed WHERE date = ?', (date,))
     total_calories_consumed = c.fetchone()[0]
     conn.close()
+    print('Total Calories Consumed:', total_calories_consumed)  # Add this line to print the value
     return total_calories_consumed
+
 
 if __name__ == '__main__':
     app.run(debug=True)
