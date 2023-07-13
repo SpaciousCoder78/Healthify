@@ -1,14 +1,21 @@
-let timer = document.querySelector('.timer');
-let button = document.querySelector('.start');
+//*********************VARIABLE DUMP*************************************
+let timer1 = document.querySelector('.timer1');
+let button1 = document.querySelector('.start1');
+let startButton = document.createElement("button");
 let timerInterval; // Variable to store the timer interval ID
+//*********************************************************************** */
 
+//arrays to define the types of workout
 const chestExercise = ['Pushup', 'Bench Press', 'Incline Dumbell Press', 'Dumbel Flys', 'Dips'];
 const backExercise = ['Pull-ups', 'Deadlifts', 'Bent Over Rows', 'Lat Pulldowns', 'Seated Cable Rows'];
 const legExercise = ['Squats', 'Lunges', 'Deadlifts', 'Leg Press', 'Calf Raises'];
 const absExercise = ['Crunches', 'Plank', 'Russian Twists', 'Leg Raises', 'Bicycle Crunches'];
 const shoulderExercise = ['Overhead Press', 'Dumbbell Shoulder Press', 'Arnold Press', 'Lateral Raises', 'Front Raises'];
 
-button.addEventListener("click", () => {
+//************************************************************************ */
+//action listeners to make the buttons actually work
+//############################button 1##############################
+button1.addEventListener("click", () => {
   let duration = 45; // Duration in seconds
   let minutes, seconds;
 
@@ -28,20 +35,23 @@ button.addEventListener("click", () => {
       clearInterval(timerInterval);
 
       // Create a new start button element
-      let startButton = document.createElement("button");
+      
       startButton.innerText = "Start";
-      startButton.classList.add("start");
+      startButton.classList.add("start1");
 
       // Replace the timer element with the start button
       timer.replaceWith(startButton);
 
       // Add event listener to the new start button
       startButton.addEventListener("click", startButtonClick);
+
     }
   }, 1000);
 });
 
+//function to make the start button work again
 function startButtonClick() {
   // Restart the timer by triggering the button click
-  button.click();
+  button1.click();
+  startButton.replaceWith(timer1);
 }
