@@ -16,13 +16,13 @@ const shoulderExercise = ['Overhead Press', 'Dumbbell Shoulder Press', 'Arnold P
 const legExercise = ['Squats', 'Lunges', 'Deadlifts', 'Leg Press', 'Calf Raises'];
 
 // Action listeners to make the buttons work
-button1.addEventListener('click', startWorkout.bind(null, chestExercise, timer1, button1));
-button2.addEventListener('click', startWorkout.bind(null, backExercise, timer2, button2));
-button3.addEventListener('click', startWorkout.bind(null, shoulderExercise, timer3, button3));
-button4.addEventListener('click', startWorkout.bind(null, legExercise, timer4, button4));
+button1.addEventListener('click', startWorkout.bind(null, chestExercise, timer1, button1, 'Chest'));
+button2.addEventListener('click', startWorkout.bind(null, backExercise, timer2, button2, 'Back'));
+button3.addEventListener('click', startWorkout.bind(null, shoulderExercise, timer3, button3, 'Shoulder'));
+button4.addEventListener('click', startWorkout.bind(null, legExercise, timer4, button4, 'Legs'));
 
 // Function to start the workout
-function startWorkout(exercises, timerElement, buttonElement) {
+function startWorkout(exercises, timerElement, buttonElement, workoutType) {
   let exerciseIndex = 0;
   let duration = 45; // Duration in seconds
 
@@ -61,6 +61,10 @@ function startWorkout(exercises, timerElement, buttonElement) {
       // Reset the timer and show "Start" button
       timerElement.textContent = 'Start';
       buttonElement.disabled = false;
+
+      // Calculate calories burnt for the workout
+      const caloriesBurnt = calculateCaloriesBurnt(exercises);
+      storeCaloriesBurnt(caloriesBurnt, workoutType);
     }
   };
 
@@ -97,3 +101,93 @@ function startWorkout(exercises, timerElement, buttonElement) {
     timerInterval4 = setInterval(startTimer, 1000);
   }
 }
+
+// Function to calculate the calories burnt for a workout
+function calculateCaloriesBurnt(exercises) {
+  let caloriesBurnt = 0;
+
+  for (let i = 0; i < exercises.length; i++) {
+    caloriesBurnt += 10; // Example formula, replace with your own calculation
+  }
+
+  return caloriesBurnt;
+}
+
+// Function to store the calories burnt in the SQLite database
+function storeCaloriesBurnt(caloriesBurnt, workoutType) {
+  // Perform an AJAX request to the server to store the calories burnt
+  fetch('/store-calories-burnt', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      caloriesBurnt: caloriesBurnt,
+      workoutType: workoutType
+    })
+  })
+    .then(response => response.text())
+    .then(data => {
+      console.log(data); // Display response from the server
+    })
+    .catch(error => {
+      console.log('Error storing calories burnt:', error);
+    });
+}
+
+// Function to store the calories consumed in the SQLite database
+function storeCaloriesConsumed(caloriesConsumed) {
+  // Perform an AJAX request to the server to store the calories consumed
+  fetch('/store-calories-consumed', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      caloriesConsumed: caloriesConsumed
+    })
+  })
+    .then(response => response.text())
+    .then(data => {
+      console.log(data); // Display response from the server
+    })
+    .catch(error => {
+      console.log('Error storing calories consumed:', error);
+    });
+}
+
+function getCurrentDate() {
+  const date = new Date();
+  const year = date.getFullYear();
+  let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1 and pad with leading zero if necessary
+  let day = date.getDate().toString().padStart(2, '0'); // Pad day with leading zero if necessary
+
+  return `${year}-${month}-${day}`;
+}
+
+
+// Function to fetch and display the net calories
+function displayNetCalories() {
+  const currentDate = getCurrentDate(); // Implement this function to get the current date in the desired format
+
+  // Fetch the total calories burnt and consumed for the date
+  Promise.all([
+    fetch(`/get-calories-burnt?date=${currentDate}`).then(response => response.json()),
+    fetch(`/get-calories-consumed?date=${currentDate}`).then(response => response.json())
+  ])
+    .then(data => {
+      const caloriesBurnt = parseFloat(data[0].totalCaloriesBurnt) || 0;
+      const caloriesConsumed = parseFloat(data[1].totalCaloriesConsumed) || 0;
+      const netCalories = caloriesBurnt - caloriesConsumed;
+
+      // Update the net calories on the HTML page
+      const netCaloriesElement = document.getElementById('net-calories');
+      netCaloriesElement.textContent = `Net Calories: ${netCalories.toFixed(2)}`;
+    })
+    .catch(error => {
+      console.log('Error fetching total calories:', error);
+    });
+}
+
+// Call the function to display net calories on page load
+displayNetCalories();
