@@ -4,7 +4,7 @@
 }
 
 body {
-    background-image:  url("../images/image.avif") ;
+    background-image:  url("fitnessbg.webp") ;
     background-repeat: no-repeat;
     background-size: cover;
     font-family: 'Open Sans', sans-serif;
@@ -46,4 +46,17 @@ nav li a {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.box1{
+    padding: 8px;
+    background-color: white;
+    width: 40%;
+    margin: 20px;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
 
